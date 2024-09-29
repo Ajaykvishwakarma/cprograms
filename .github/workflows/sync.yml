@@ -41,7 +41,7 @@ jobs:
 
     - name: Merge upstream changes
       run: |
-        git merge upstream/master --allow-unrelated-histories || echo "No changes to merge"
+        git merge upstream/main --allow-unrelated-histories || echo "No changes to merge"
 
     # - name: Run linter (if applicable)
     #   run: |
