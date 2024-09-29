@@ -1,0 +1,58 @@
+name: Sync Fork with Upstream cprograms
+
+on:
+  workflow_dispatch: # Allow manual triggering of the workflow
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+
+    - name: Set up Git
+      run: |
+        git config --global user.name 'Ajay-MasterWorks'
+        git config --global user.email 'avishwakarma@master-works.sa'
+
+    - name: Add upstream remote
+      run: |
+        git remote add upstream https://github.com/Ajaykvishwakarma/cprograms.git
+        git fetch upstream
+    
+    # - name: Check for uncommitted changes
+    #   run: |
+    #     if [[ -n $(git status -s) ]]; then
+    #       echo "Warning: There are uncommitted changes in the repository.";
+    #       exit 1;
+    #     fi
+    
+    - name: Check for merge conflicts
+      run: |
+        git checkout master
+        git merge --no-commit --no-ff upstream/master
+        if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
+          echo "Merge conflicts detected. Please resolve manually.";
+          exit 1;
+        fi
+
+    - name: Merge upstream changes
+      run: |
+        git merge upstream/master --allow-unrelated-histories || echo "No changes to merge"
+
+    # - name: Run linter (if applicable)
+    #   run: |
+    #     # Example: Run a linter or static code analysis tool (if relevant)
+    #     # Uncomment and replace the command based on your project's language
+    #     # e.g., for C, you might use a tool like cppcheck
+    #     # cppcheck --enable=all .
+    #     echo "Linter passed (placeholder)"
+
+    - name: Push changes to the cprograms
+      run: |
+        git push origin master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
