@@ -23,12 +23,12 @@ jobs:
         git remote add upstream https://github.com/Ajaykvishwakarma/cprograms.git
         git fetch upstream
     
-    # - name: Check for uncommitted changes
-    #   run: |
-    #     if [[ -n $(git status -s) ]]; then
-    #       echo "Warning: There are uncommitted changes in the repository.";
-    #       exit 1;
-    #     fi
+    - name: Check for uncommitted changes
+      run: |
+        if [[ -n $(git status -s) ]]; then
+          echo "Warning: There are uncommitted changes in the repository.";
+          exit 1;
+        fi
     
     - name: Check for merge conflicts
       run: |
